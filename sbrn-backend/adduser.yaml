@@ -14,20 +14,28 @@ spec:
         app: adduser-express 
     spec:
       initContainers:
-      - name: db-sync-aduser 
-        image: getservice
-        imagePullPolicy: Never
-        command: ["/bin/sh","-c"]
-        args: ["npx prisma db push"]
-        env:
-         - name: DATABASE_URL 
-           valueFrom:
-             secretKeyRef:
-               name: sbrn-sec
-               key: DATABASE_URL 
+        - name: db-sync-aduser 
+          image: getservice
+          imagePullPolicy: Never
+          resources:
+            limits:      # Plural 's'
+              cpu: "100m"
+              memory: "128Mi"
+            requests:    # Plural 's'
+              cpu: "50m"
+              memory: "64Mi"
+          command: ["/bin/sh","-c"]
+          args: ["npx prisma db push"]
+          env:
+            - name: DATABASE_URL 
+              valueFrom:
+                secretKeyRef:
+                  name: sbrn-sec
+                  key: DATABASE_URL 
       containers: 
         - name: adduser-container 
           image: adduser
+          imagePullPolicy: Never 
           resources:
             requests:
               memory: "100Mi"
@@ -35,9 +43,8 @@ spec:
             limits:
               memory: "200Mi"
               cpu: "2"
-          imagePullPolicy: Never # Fixed typo
           env:
             - name: DATABASE_URL 
               value: "postgresql://postgres:suborna@postgrescn-rw:5432/appdb?schema=public"
           ports:
-            - containerPort: 4045 # Fixed typo and matched Dockerfile EXPOSE
+            - containerPort: 4045
