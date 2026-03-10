@@ -1,0 +1,25 @@
+FROM node:20-alpine AS builder 
+WORKDIR /app 
+# Define an argument with a default dummy value
+ARG DATABASE_URL="postgresql://placeholder:5432/db"
+COPY package*json ./ 
+RUN npm install  
+ 
+COPY  prisma ./prisma 
+ 
+COPY service/getser/getuser.js ./ 
+COPY client.js ./
+COPY prisma.config.ts ./ 
+
+RUN npx prisma generate
+
+FROM node:20-alpine 
+WORKDIR /app 
+COPY --from=builder --chown=node:node /app/node_modules ./node_modules
+COPY --from=builder --chown=node:node /app/prisma ./prisma 
+COPY --from=builder --chown=node:node /app/client.js ./
+COPY  --from=builder --chown=node:node /app/getuser.js ./
+COPY --from=builder --chown=node:node /app/prisma.config.ts ./
+USER node
+EXPOSE  4053
+CMD ["node","getuser.js"]

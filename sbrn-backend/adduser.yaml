@@ -1,0 +1,43 @@
+apiVersion: apps/v1 
+kind: Deployment 
+metadata:
+  name: adduser
+  namespace: suborna
+spec:
+  replicas: 2 
+  selector: 
+    matchLabels:
+      app: adduser-express 
+  template: 
+    metadata: 
+      labels: 
+        app: adduser-express 
+    spec:
+      initContainers:
+      - name: db-sync-aduser 
+        image: getservice
+        imagePullPolicy: Never
+        command: ["/bin/sh","-c"]
+        args: ["npx prisma db push"]
+        env:
+         - name: DATABASE_URL 
+           valueFrom:
+             secretKeyRef:
+               name: sbrn-sec
+               key: DATABASE_URL 
+      containers: 
+        - name: adduser-container 
+          image: adduser
+          resources:
+            requests:
+              memory: "100Mi"
+              cpu: "1"
+            limits:
+              memory: "200Mi"
+              cpu: "2"
+          imagePullPolicy: Never # Fixed typo
+          env:
+            - name: DATABASE_URL 
+              value: "postgresql://postgres:suborna@postgrescn-rw:5432/appdb?schema=public"
+          ports:
+            - containerPort: 4045 # Fixed typo and matched Dockerfile EXPOSE

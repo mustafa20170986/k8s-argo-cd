@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress 
+metadata: 
+  name: sbnr-ingress 
+  annotations:
+    # Keep this for backward compatibility
+    kubernetes.io/ingress.class: nginx
+spec:
+  ingressClassName: nginx  # <--- ADD THIS LINE
+  rules:
+    - http:
+        paths:
+          - path: /add
+            pathType: Prefix
+            backend:
+              service: 
+                name: adsrv
+                port:
+                  number: 70
+          - path: /get-userdata
+            pathType: Prefix 
+            backend: 
+              service:
+                name: gtsrv 
+                port:
+                  number: 80

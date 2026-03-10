@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: tuning
+data:
+  DB_NAME: "appdb"
+  DB_HOST: "postgres"
+  DB_PORT: "5432"
+
+---
+apiVersion: v1 
+kind: Secret 
+metadata:
+  name: sbrn-sec
+type: Opaque
+stringData:
+  username: postgres
+  password: suborna
+  DATABASE_URL: "postgresql://postgres:suborna@postgrescn-rw:5432/appdb?schema=public"

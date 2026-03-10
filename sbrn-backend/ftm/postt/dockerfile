@@ -1,0 +1,27 @@
+FROM node:20-alpine AS builder 
+WORKDIR /app 
+ARG DATABASE_URL="postgresql://placeholder:5432/db"
+COPY package*.json ./ 
+
+RUN npm install 
+
+COPY prisma ./prisma 
+COPY post.js ./
+COPY client.js ./ 
+COPY prisma.config.ts ./   
+COPY  middleware ./middleware 
+
+RUN npx prisma generate 
+
+FROM node:20-alpine 
+WORKDIR /app 
+
+COPY --from=builder /app/node_modules ./node_modules 
+COPY --from=builder /app/prisma ./prisma 
+COPY --from=builder /app/middleware ./middleware 
+COPY --from=builder /app/post.js ./ 
+COPY --from=builder /app/client.js ./ 
+COPY --from=builder /app/prisma.config.ts ./
+
+EXPOSE 4045
+CMD ["node","post.js"]
