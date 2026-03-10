@@ -18,10 +18,10 @@ spec:
           image: getservice
           imagePullPolicy: Never
           resources:
-            limits:      # Plural 's'
+            limits:
               cpu: "100m"
               memory: "128Mi"
-            requests:    # Plural 's'
+            requests:
               cpu: "50m"
               memory: "64Mi"
           command: ["/bin/sh","-c"]
@@ -32,7 +32,7 @@ spec:
                 secretKeyRef:
                   name: sbrn-sec
                   key: DATABASE_URL 
-      containers: 
+      containers: # Fixed: Moved back to align with initContainers
         - name: adduser-container 
           image: adduser
           imagePullPolicy: Never 
