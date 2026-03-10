@@ -1,4 +1,18 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: adduser
+  namespace: suborna
 spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: adduser-express
+  template:
+    metadata:
+      labels:
+        app: adduser-express
+    spec:
       initContainers:
         - name: db-sync-aduser
           image: getservice
