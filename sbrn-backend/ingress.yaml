@@ -1,7 +1,8 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress 
 metadata: 
-  name: sbnr-ingress 
+  name: sbnr-ingress
+  namespace: suborna 
   annotations:
     # Keep this for backward compatibility
     kubernetes.io/ingress.class: nginx
