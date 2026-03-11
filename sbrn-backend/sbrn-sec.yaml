@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: sbrn-sec
+  namespace: suborna
+type: Opaque
+stringData:
+  # Internal URL: user:pass@service:port/database
+  DATABASE_URL: "postgresql://postgres:suborna@postgrescn-rw:5432/appdb?sslmode=disable"
+  #need to push in github 
