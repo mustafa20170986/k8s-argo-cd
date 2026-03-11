@@ -17,6 +17,13 @@ spec:
       - name: db-sync 
         image: getservice
         imagePullPolicy: Never
+        resources: # REQUIRED BY QUOTA
+          requests:
+            memory: "100Mi"
+            cpu: "50m"
+          limits:
+            memory: "200Mi"
+            cpu: "100m"
         command: ["/bin/sh","-c"]
         args: ["npx prisma db push"]
         env:
@@ -44,4 +51,3 @@ spec:
                key: DATABASE_URL
         ports: 
         - containerPort: 4047
- 

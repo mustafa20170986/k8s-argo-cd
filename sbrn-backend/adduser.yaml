@@ -17,6 +17,13 @@ spec:
         - name: db-sync-aduser
           image: adduser
           imagePullPolicy: Never
+          resources: # Added this to satisfy quota
+            requests:
+              cpu: "50m"
+              memory: "100Mi"
+            limits:
+              cpu: "100m"
+              memory: "200Mi"
           command: ["/bin/sh","-c"]
           args: ["npx prisma db push"]
           env:
@@ -42,6 +49,5 @@ spec:
                 secretKeyRef:
                   name: sbrn-sec
                   key: DATABASE_URL
-              
           ports:
             - containerPort: 4045
