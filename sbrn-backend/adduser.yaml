@@ -13,25 +13,6 @@ spec:
       labels:
         app: adduser-express
     spec:
-      initContainers:
-        - name: db-sync-aduser
-          image: adduser
-          imagePullPolicy: Never
-          resources: # Added this to satisfy quota
-            requests:
-              cpu: "50m"
-              memory: "100Mi"
-            limits:
-              cpu: "100m"
-              memory: "200Mi"
-          command: ["/bin/sh","-c"]
-          args: ["npx prisma db push"]
-          env:
-            - name: DATABASE_URL
-              valueFrom:
-                secretKeyRef:
-                  name: sbrn-sec
-                  key: DATABASE_URL
       containers:
         - name: adduser-container
           image: adduser

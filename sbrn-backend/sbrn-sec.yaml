@@ -5,6 +5,5 @@ metadata:
   namespace: suborna
 type: Opaque
 stringData:
-  # Internal URL: user:pass@service:port/database
-  DATABASE_URL: "postgresql://postgres:suborna@postgrescn-rw:5432/appdb?sslmode=disable"
-  #need to push in github 
+  # Updated with your Neon DB connection string
+  DATABASE_URL: "postgresql://neondb_owner:npg_ckr6bCFB7Vgz@ep-small-darkness-ahriz0ey.c-3.us-east-1.aws.neon.tech/neondb?sslmode=require"
